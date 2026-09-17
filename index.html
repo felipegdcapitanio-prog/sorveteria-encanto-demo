@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>Sorveteria Encanto — Campo Alegre, MT (demo)</title>
+  <meta name="description" content="Projeto demonstrativo de site pra sorveteria: cardápio de sabores, combo em destaque e pedido direto pelo WhatsApp, num visual bem colorido e animado." />
+  <meta name="theme-color" content="#fff3d6" />
+
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet" />
+
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+  <a href="#conteudo" class="skip-link">Pular para o conteúdo</a>
+
+  <!-- ===== HEADER ===== -->
+  <header class="header">
+    <div class="container header__inner">
+      <a href="#topo" class="header__logo">
+        <span class="header__logo-icone" aria-hidden="true">🍦</span>
+        <span>Encanto</span>
+      </a>
+      <nav class="header__nav" id="header-nav">
+        <a href="#sabores">Sabores</a>
+        <a href="#combo">Combo</a>
+        <a href="#sobre">Sobre</a>
+        <a href="#local">Onde estamos</a>
+      </nav>
+      <a href="#" class="btn btn--primario btn--pequeno header__cta" id="header-whatsapp" target="_blank" rel="noopener noreferrer">Pedir agora</a>
+      <button type="button" class="header__burger" id="btn-menu" aria-label="Abrir menu" aria-expanded="false" aria-controls="menu-mobile">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </header>
+
+  <!-- ===== MENU MOBILE ===== -->
+  <div class="overlay" id="overlay-menu" hidden></div>
+  <nav class="menu-mobile" id="menu-mobile" hidden aria-label="Menu">
+    <a href="#sabores">Sabores</a>
+    <a href="#combo">Combo</a>
+    <a href="#sobre">Sobre</a>
+    <a href="#local">Onde estamos</a>
+    <a href="#" class="btn btn--primario" id="menu-whatsapp" target="_blank" rel="noopener noreferrer">Pedir agora</a>
+  </nav>
+
+  <main id="conteudo">
+
+    <!-- ===== HERO ===== -->
+    <section class="hero" id="topo">
+      <div class="hero__mancha hero__mancha--1" aria-hidden="true"></div>
+      <div class="hero__mancha hero__mancha--2" aria-hidden="true"></div>
+      <div class="hero__confete" id="hero-confete" aria-hidden="true"></div>
+
+      <div class="container hero__grade">
+        <div class="hero__coluna-texto">
+          <p class="hero__eyebrow" id="hero-eyebrow"></p>
+          <h1 class="hero__titulo">
+            Sorvete de verdade
+            <span class="hero__titulo-destaque">pra alegrar seu dia.</span>
+          </h1>
+          <p class="hero__slogan" id="hero-slogan"></p>
+          <div class="hero__acoes">
+            <a href="#" class="btn btn--primario btn--grande" id="hero-whatsapp" target="_blank" rel="noopener noreferrer">
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.5 15.2L2 22l4.9-1.5A10 10 0 1 0 12 2zm0 18.2a8.1 8.1 0 0 1-4.2-1.2l-.3-.2-3 .9.9-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2z"/></svg>
+              Pedir no WhatsApp
+            </a>
+            <a href="#sabores" class="btn btn--fantasma btn--grande">Ver sabores</a>
+          </div>
+        </div>
+
+        <div class="hero__cone-wrap" aria-hidden="true">
+          <div class="cone-grande cone-grande--flutuar">
+            <span class="cone-grande__bola cone-grande__bola--3"></span>
+            <span class="cone-grande__bola cone-grande__bola--2"></span>
+            <span class="cone-grande__bola cone-grande__bola--1"></span>
+            <span class="cone-grande__casquinha"></span>
+          </div>
+          <span class="hero__rabisco hero__rabisco--1">✦</span>
+          <span class="hero__rabisco hero__rabisco--2">✧</span>
+          <span class="hero__rabisco hero__rabisco--3">❉</span>
+        </div>
+      </div>
+
+      <div class="onda-borda" aria-hidden="true">
+        <svg viewBox="0 0 1440 90" preserveAspectRatio="none"><path d="M0,40 C240,90 480,0 720,30 C960,60 1200,10 1440,45 L1440,90 L0,90 Z"></path></svg>
+      </div>
+    </section>
+
+    <!-- ===== FAIXA DE PROMOÇÃO ===== -->
+    <div class="faixa-promo">
+      <div class="faixa-promo__trilho" id="faixa-promo-trilho" aria-hidden="true"></div>
+    </div>
+
+    <!-- ===== SABORES ===== -->
+    <section class="secao" id="sabores">
+      <div class="container">
+        <p class="secao__eyebrow">Sabores da casa</p>
+        <h2 class="secao__titulo">Novidades na vitrine</h2>
+        <p class="secao__intro">Seis sabores pra você escolher — todos feitos artesanalmente, todo dia, aqui na loja.</p>
+        <div class="sabores__grade" id="lista-sabores"></div>
+      </div>
+    </section>
+
+    <!-- ===== COMBO ===== -->
+    <section class="secao secao--combo" id="combo">
+      <span class="secao--combo__rabisco secao--combo__rabisco--1" aria-hidden="true">✦</span>
+      <span class="secao--combo__rabisco secao--combo__rabisco--2" aria-hidden="true">🍒</span>
+      <div class="container combo__grade">
+        <div class="combo__leque" id="combo-leque" aria-hidden="true"></div>
+        <div class="combo__texto">
+          <p class="secao__eyebrow">Pra compartilhar</p>
+          <h2 class="secao__titulo">Monte seu combo e aproveite com a galera</h2>
+          <p class="secao__intro" id="combo-descricao"></p>
+          <div class="combo__preco">
+            <span class="combo__preco-de" id="combo-preco-de"></span>
+            <span class="combo__preco-por" id="combo-preco-por"></span>
+          </div>
+          <a href="#" class="btn btn--primario btn--grande" id="combo-whatsapp" target="_blank" rel="noopener noreferrer">Pedir combo agora</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== SOBRE ===== -->
+    <section class="secao secao--sobre" id="sobre">
+      <div class="container sobre__grade">
+        <div class="sobre__foto" aria-hidden="true">
+          <div class="sobre__foto-mancha"></div>
+          <span class="sobre__foto-emoji">🍨</span>
+        </div>
+        <div>
+          <p class="secao__eyebrow">Nossa história</p>
+          <h2 class="secao__titulo" id="sobre-titulo"></h2>
+          <p class="secao__intro" id="sobre-texto"></p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== DEPOIMENTOS ===== -->
+    <section class="secao" id="depoimentos">
+      <div class="container">
+        <p class="secao__eyebrow">Quem já provou</p>
+        <h2 class="secao__titulo">O que a galera fala da gente</h2>
+        <div class="depoimentos__grade" id="lista-depoimentos"></div>
+      </div>
+    </section>
+
+    <!-- ===== CTA FAIXA ===== -->
+    <div class="cta-faixa">
+      <div class="container cta-faixa__inner">
+        <div>
+          <h2>Bateu aquela vontade de sorvete?</h2>
+          <p>Chama no WhatsApp e já vai separando sua casquinha.</p>
+        </div>
+        <a href="#" class="btn btn--claro btn--grande" id="cta-whatsapp" target="_blank" rel="noopener noreferrer">Chamar no WhatsApp</a>
+      </div>
+    </div>
+
+    <!-- ===== ONDE ESTAMOS ===== -->
+    <section class="secao" id="local">
+      <div class="container local-grade">
+        <div>
+          <p class="secao__eyebrow">Onde estamos</p>
+          <h2 class="secao__titulo">Vem tomar um sorvetinho</h2>
+          <p class="local__item" id="local-endereco"></p>
+          <div class="local__horario" id="local-horario"></div>
+          <div class="local__acoes">
+            <a href="#" class="btn btn--primario" id="local-whatsapp" target="_blank" rel="noopener noreferrer">Chamar no WhatsApp</a>
+            <a href="#" class="btn btn--fantasma" id="local-mapa" target="_blank" rel="noopener noreferrer">Abrir no Google Maps</a>
+          </div>
+        </div>
+        <div class="mapa-card">
+          <div class="mapa-card__fundo" aria-hidden="true">
+            <svg viewBox="0 0 200 140" preserveAspectRatio="none"><path d="M0 30 H200 M0 70 H200 M0 110 H200 M40 0 V140 M100 0 V140 M160 0 V140" stroke="currentColor" stroke-width="1" opacity="0.35"/></svg>
+            <span class="mapa-card__pin">🍦</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ===== RODAPÉ ===== -->
+  <footer class="rodape">
+    <div class="container rodape__inner">
+      <p>© <span id="ano-atual"></span> Sorveteria Encanto.</p>
+      <p class="rodape__aviso">Projeto demonstrativo criado pela Âncora — não representa uma sorveteria real. Nomes nos depoimentos são fictícios.</p>
+    </div>
+  </footer>
+
+  <!-- ===== BOTÃO FLUTUANTE ===== -->
+  <div class="flutuantes">
+    <a href="#" class="wa-flutuante" id="wa-flutuante" target="_blank" rel="noopener noreferrer" aria-label="Falar no WhatsApp">
+      <svg viewBox="0 0 24 24" width="26" height="26" fill="currentColor" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.5 15.2L2 22l4.9-1.5A10 10 0 1 0 12 2zm0 18.2a8.1 8.1 0 0 1-4.2-1.2l-.3-.2-3 .9.9-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8-.2-.1-.4-.1-.6.1-.2.2-.7.8-.8 1-.2.2-.3.2-.5.1-.2-.1-1-.4-1.9-1.2-.7-.6-1.2-1.4-1.3-1.6-.1-.2 0-.4.1-.5.1-.1.2-.3.4-.4.1-.1.2-.2.2-.4.1-.1 0-.3 0-.4 0-.1-.6-1.5-.8-2-.2-.5-.4-.4-.6-.4h-.5c-.2 0-.4.1-.6.3-.2.2-.8.8-.8 1.9s.8 2.2.9 2.4c.1.2 1.6 2.5 4 3.5.6.2 1 .4 1.3.5.5.2 1 .1 1.4-.1.4-.2 1.3-.9 1.4-1.4.2-.5.2-.9.1-1z"/></svg>
+    </a>
+  </div>
+
+  <!-- ===== BARRA DE AÇÃO FIXA (só no celular) ===== -->
+  <a href="#" class="cta-mobile" id="cta-mobile-whatsapp" target="_blank" rel="noopener noreferrer">
+    <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.5 15.2L2 22l4.9-1.5A10 10 0 1 0 12 2zm0 18.2a8.1 8.1 0 0 1-4.2-1.2l-.3-.2-3 .9.9-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2z"/></svg>
+    Pedir no WhatsApp
+  </a>
+
+  <script src="js/config.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>

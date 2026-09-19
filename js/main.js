@@ -469,50 +469,42 @@
     return total;
   }
 
-  function renderMontadorOpcoes() {
-    // Base
+  /**
+   * Monta o HTML dos quatro passos UMA vez só.
+   *
+   * O caminho óbvio seria refazer o innerHTML a cada escolha, mas aí o
+   * botão some debaixo do dedo no meio do toque — testando no celular, 2
+   * de 3 toques seguidos em sabores se perdiam desse jeito. Além disso o
+   * foco do teclado ia junto. Então aqui o DOM nasce uma vez e cada
+   * escolha só mexe nos atributos, em `sincronizarOpcoes`.
+   */
+  function montarOpcoes() {
     $("#montador-bases").innerHTML = CONFIG.montador.bases
-      .map((b) => `<button type="button" class="opcao" data-base="${b.id}" aria-pressed="${b.id === montagem.base}">
+      .map((b) => `<button type="button" class="opcao" data-base="${b.id}" aria-pressed="false">
         <span class="opcao__nome">${escapar(b.nome)}</span>
         <span class="opcao__desc">${escapar(b.desc)}</span>
         ${b.adicional ? `<span class="opcao__preco">+ ${moeda(b.adicional)}</span>` : ""}
       </button>`)
       .join("");
 
-    // Tamanho
     $("#montador-tamanhos").innerHTML = CONFIG.montador.tamanhos
-      .map((t) => `<button type="button" class="opcao" data-tamanho="${t.id}" aria-pressed="${t.id === montagem.tamanho}">
+      .map((t) => `<button type="button" class="opcao" data-tamanho="${t.id}" aria-pressed="false">
         ${t.destaque ? '<span class="opcao__selo">Mais pedido</span>' : ""}
         <span class="opcao__nome">${escapar(t.nome)}</span>
         <span class="opcao__preco">${moeda(t.preco)}</span>
       </button>`)
       .join("");
 
-    // Sabores
-    const limite = limiteBolas();
-    const cheio = montagem.sabores.length >= limite;
     $("#montador-sabores").innerHTML = CONFIG.sabores
-      .map((s) => {
-        const qtd = montagem.sabores.filter((id) => id === s.id).length;
-        const bloqueado = cheio && qtd === 0;
-        return `<button type="button" class="bolinha-sabor" data-sabor-add="${s.id}"
-          aria-pressed="${qtd > 0}" ${bloqueado ? "disabled" : ""}
-          aria-label="${escapar(s.nome)}${qtd ? ` (${qtd} na casquinha)` : ""}">
-          ${qtd > 1 ? `<span class="bolinha-sabor__qtd">${qtd}</span>` : ""}
-          <span class="bolinha-sabor__disco" style="${varsDaBola(s)}"></span>
-          <span class="bolinha-sabor__nome">${escapar(s.nome)}</span>
-        </button>`;
-      })
+      .map((s) => `<button type="button" class="bolinha-sabor" data-sabor-add="${s.id}" aria-pressed="false">
+        <span class="bolinha-sabor__qtd" hidden>0</span>
+        <span class="bolinha-sabor__disco" style="${varsDaBola(s)}"></span>
+        <span class="bolinha-sabor__nome">${escapar(s.nome)}</span>
+      </button>`)
       .join("");
 
-    const dica = $("#montador-dica-sabores");
-    const faltam = limite - montagem.sabores.length;
-    dica.textContent = faltam > 0 ? `escolha ${faltam} ${faltam === 1 ? "bola" : "bolas"}` : "tudo escolhido ✓";
-    dica.classList.toggle("passo__dica--alerta", faltam > 0);
-
-    // Extras
     $("#montador-extras").innerHTML = CONFIG.montador.extras
-      .map((e) => `<button type="button" class="extra-linha" data-extra="${e.id}" aria-pressed="${montagem.extras.includes(e.id)}">
+      .map((e) => `<button type="button" class="extra-linha" data-extra="${e.id}" aria-pressed="false">
         <span class="extra-linha__caixa">
           <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="3.4"><path d="m5 13 4 4L19 7"/></svg>
         </span>
@@ -522,36 +514,33 @@
       </button>`)
       .join("");
 
-    ligarEventosMontador();
-  }
-
-  function ligarEventosMontador() {
+    // Listeners ligados uma vez só, nos elementos que vão viver a página toda
     $$("[data-base]").forEach((b) => b.addEventListener("click", () => {
       montagem.base = b.dataset.base;
-      renderMontadorOpcoes();
+      sincronizarOpcoes();
       renderPrevia(true);
     }));
 
     $$("[data-tamanho]").forEach((b) => b.addEventListener("click", () => {
       montagem.tamanho = b.dataset.tamanho;
-      // Se diminuiu o tamanho, corta as bolas que sobraram
+      // diminuiu o tamanho: corta as bolas que não cabem mais
       montagem.sabores = montagem.sabores.slice(0, limiteBolas());
-      renderMontadorOpcoes();
+      sincronizarOpcoes();
       renderPrevia(true);
     }));
 
     $$("[data-sabor-add]").forEach((b) => b.addEventListener("click", () => {
       const id = b.dataset.saborAdd;
       const qtd = montagem.sabores.filter((s) => s === id).length;
-      if (qtd > 0 && montagem.sabores.length >= limiteBolas()) {
-        // já está cheio e esse sabor já está lá: um toque tira uma bola dele
-        montagem.sabores.splice(montagem.sabores.indexOf(id), 1);
-      } else if (montagem.sabores.length < limiteBolas()) {
+      if (montagem.sabores.length < limiteBolas()) {
         montagem.sabores.push(id);
+      } else if (qtd > 0) {
+        // já está cheio e esse sabor está lá: o toque tira uma bola dele
+        montagem.sabores.splice(montagem.sabores.indexOf(id), 1);
       } else {
         return;
       }
-      renderMontadorOpcoes();
+      sincronizarOpcoes();
       renderPrevia(true);
     }));
 
@@ -566,9 +555,37 @@
         }
         montagem.extras.push(id);
       }
-      renderMontadorOpcoes();
+      sincronizarOpcoes();
       renderPrevia(true);
     }));
+  }
+
+  /** Reflete o estado atual nos botões, sem recriar nenhum deles. */
+  function sincronizarOpcoes() {
+    $$("[data-base]").forEach((b) => b.setAttribute("aria-pressed", b.dataset.base === montagem.base));
+    $$("[data-tamanho]").forEach((b) => b.setAttribute("aria-pressed", b.dataset.tamanho === montagem.tamanho));
+
+    const limite = limiteBolas();
+    const cheio = montagem.sabores.length >= limite;
+
+    $$("[data-sabor-add]").forEach((b) => {
+      const id = b.dataset.saborAdd;
+      const qtd = montagem.sabores.filter((s) => s === id).length;
+      const sabor = saborPorId(id);
+      b.setAttribute("aria-pressed", qtd > 0);
+      b.disabled = cheio && qtd === 0;
+      b.setAttribute("aria-label", `${sabor.nome}${qtd ? ` (${qtd} ${qtd === 1 ? "bola" : "bolas"} na casquinha)` : ""}`);
+      const selo = b.querySelector(".bolinha-sabor__qtd");
+      selo.hidden = qtd < 2;
+      selo.textContent = qtd;
+    });
+
+    $$("[data-extra]").forEach((b) => b.setAttribute("aria-pressed", montagem.extras.includes(b.dataset.extra)));
+
+    const dica = $("#montador-dica-sabores");
+    const faltam = limite - montagem.sabores.length;
+    dica.textContent = faltam > 0 ? `escolha ${faltam} ${faltam === 1 ? "bola" : "bolas"}` : "tudo escolhido ✓";
+    dica.classList.toggle("passo__dica--alerta", faltam > 0);
   }
 
   function descricaoMontagem() {
@@ -617,7 +634,8 @@
   }
 
   function ligarMontador() {
-    renderMontadorOpcoes();
+    montarOpcoes();      // cria os botões e liga os listeners, uma vez só
+    sincronizarOpcoes(); // marca o estado inicial neles
     renderPrevia(false);
 
     $("#montador-add").addEventListener("click", () => {
@@ -633,7 +651,7 @@
       // Limpa os sabores pra pessoa montar a próxima sem apagar um por um
       montagem.sabores = [];
       montagem.extras = [];
-      renderMontadorOpcoes();
+      sincronizarOpcoes();
       renderPrevia(true);
     });
 
@@ -650,7 +668,7 @@
       for (let i = 0; i < limiteBolas(); i++) montagem.sabores.push(sorteia(CONFIG.sabores).id);
       montagem.extras = Math.random() > 0.35 ? [sorteia(CONFIG.montador.extras).id] : [];
 
-      renderMontadorOpcoes();
+      sincronizarOpcoes();
       renderPrevia(true);
       avisar("Sorteamos uma pra você 🎲");
     });

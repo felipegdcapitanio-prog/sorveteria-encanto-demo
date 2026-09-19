@@ -76,9 +76,19 @@
 
 *, *::before, *::after { box-sizing: border-box; }
 
+/* O atributo `hidden` vale display:none pelo estilo do navegador, que perde
+   pra qualquer `display` declarado aqui. Sem esta linha, a taxa de entrega
+   aparecia na retirada e o menu do celular continuava alcançável pelo Tab
+   mesmo fechado. */
+[hidden] { display: none !important; }
+
 html {
   scroll-behavior: smooth;
+  /* reserva o header no topo e, no celular, a barra de pedido embaixo:
+     sem isso um botão levado pra tela por link ou por scrollIntoView para
+     embaixo da barra fixa e o toque acerta a barra em vez do botão */
   scroll-padding-top: calc(var(--header-h) + 16px);
+  scroll-padding-bottom: 96px;
   -webkit-text-size-adjust: 100%;
 }
 

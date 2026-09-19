@@ -2,28 +2,28 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
 
-  <title>Sorveteria Encanto — Campo Alegre, MT (demo)</title>
-  <meta name="description" content="Projeto demonstrativo de site pra sorveteria: cardápio de sabores, combo em destaque e pedido direto pelo WhatsApp, num visual bem colorido e animado." />
-  <meta name="theme-color" content="#fff3d6" />
+  <title>Sorveteria Encanto — sorvete artesanal em Campo Alegre, MT (demo)</title>
+  <meta name="description" content="Sorvete artesanal feito todo dia, com fruta de verdade. Monte sua casquinha, escolha os sabores e peça direto pelo WhatsApp." />
+  <meta name="theme-color" content="#fdefd4" />
   <link rel="canonical" href="https://sorveteria-encanto.vercel.app/" />
   <meta property="og:type" content="website" />
-  <meta property="og:title" content="Sorveteria Encanto — Campo Alegre, MT (demo)" />
-  <meta property="og:description" content="Projeto demonstrativo de site pra sorveteria: cardápio de sabores, combo em destaque e pedido direto pelo WhatsApp, num visual bem colorido e animado." />
+  <meta property="og:title" content="Sorveteria Encanto — sorvete artesanal em Campo Alegre, MT (demo)" />
+  <meta property="og:description" content="Sorvete artesanal feito todo dia, com fruta de verdade. Monte sua casquinha, escolha os sabores e peça direto pelo WhatsApp." />
   <meta property="og:image" content="https://sorveteria-encanto.vercel.app/assets/og-image.jpg" />
   <meta property="og:url" content="https://sorveteria-encanto.vercel.app/" />
   <meta property="og:locale" content="pt_BR" />
   <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:title" content="Sorveteria Encanto — Campo Alegre, MT (demo)" />
-  <meta name="twitter:description" content="Projeto demonstrativo de site pra sorveteria: cardápio de sabores, combo em destaque e pedido direto pelo WhatsApp, num visual bem colorido e animado." />
+  <meta name="twitter:title" content="Sorveteria Encanto — sorvete artesanal em Campo Alegre, MT (demo)" />
+  <meta name="twitter:description" content="Sorvete artesanal feito todo dia, com fruta de verdade. Monte sua casquinha e peça pelo WhatsApp." />
   <meta name="twitter:image" content="https://sorveteria-encanto.vercel.app/assets/og-image.jpg" />
 
   <link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
 
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet" />
 
   <link rel="stylesheet" href="css/style.css" />
 </head>
@@ -31,20 +31,82 @@
 
   <a href="#conteudo" class="skip-link">Pular para o conteúdo</a>
 
+  <!--
+    Silhuetas do sorvete. Ficam aqui como clipPath em coordenadas relativas
+    (0 a 1), então servem pra qualquer tamanho de bola sem redesenhar nada.
+    Elipse com border-radius sempre lê como bola de gude: o que faz parecer
+    colherada de sorvete são estas beiradas irregulares.
+  -->
+  <svg width="0" height="0" aria-hidden="true" focusable="false" style="position:absolute">
+    <defs>
+      <clipPath id="colher-1" clipPathUnits="objectBoundingBox">
+        <path d="M.5,.03 C.61,0 .70,.05 .74,.13 C.82,.10 .90,.16 .90,.26
+                 C.97,.32 .98,.46 .94,.56 C.98,.66 .94,.80 .84,.86
+                 C.76,.94 .63,.97 .5,.97 C.37,.97 .24,.94 .16,.86
+                 C.06,.80 .02,.66 .06,.56 C.02,.46 .03,.32 .10,.26
+                 C.10,.16 .18,.10 .26,.13 C.30,.05 .39,0 .5,.03 Z"/>
+      </clipPath>
+      <clipPath id="colher-2" clipPathUnits="objectBoundingBox">
+        <path d="M.48,.02 C.60,0 .72,.04 .77,.14 C.86,.12 .93,.20 .92,.30
+                 C.98,.38 .97,.52 .92,.60 C.96,.70 .90,.82 .80,.88
+                 C.72,.95 .58,.98 .46,.97 C.33,.96 .21,.92 .14,.84
+                 C.05,.77 .03,.64 .07,.54 C.03,.44 .06,.30 .13,.25
+                 C.14,.15 .22,.09 .30,.12 C.34,.05 .40,.02 .48,.02 Z"/>
+      </clipPath>
+      <clipPath id="colher-3" clipPathUnits="objectBoundingBox">
+        <path d="M.52,.04 C.64,.01 .75,.07 .79,.16 C.88,.15 .95,.24 .93,.34
+                 C.98,.43 .95,.56 .90,.63 C.93,.73 .86,.85 .76,.90
+                 C.68,.96 .55,.98 .44,.96 C.31,.94 .19,.89 .13,.81
+                 C.05,.73 .05,.60 .09,.51 C.06,.41 .09,.28 .16,.24
+                 C.18,.14 .27,.09 .35,.13 C.39,.06 .45,.05 .52,.04 Z"/>
+      </clipPath>
+      <!-- Calda: domo por cima e beirada escorrendo em gotas de tamanhos diferentes -->
+      <clipPath id="calda-escorrida" clipPathUnits="objectBoundingBox">
+        <path d="M.02,.44 C.02,.17 .21,.02 .5,.02 C.79,.02 .98,.17 .98,.44
+                 L.98,.58 C.955,.69 .905,.67 .885,.58
+                 C.865,.50 .825,.55 .805,.65
+                 C.785,.80 .725,.87 .695,.76
+                 C.665,.65 .625,.69 .605,.80
+                 C.585,.97 .505,1 .465,.90
+                 C.435,.78 .385,.74 .355,.82
+                 C.325,.93 .265,.91 .245,.78
+                 C.225,.65 .175,.63 .155,.715
+                 C.135,.80 .075,.76 .055,.63
+                 C.035,.55 .02,.50 .02,.44 Z"/>
+      </clipPath>
+    </defs>
+  </svg>
+
   <!-- ===== HEADER ===== -->
   <header class="header">
     <div class="container header__inner">
-      <a href="#topo" class="header__logo">
-        <span class="header__logo-icone" aria-hidden="true">🍦</span>
+      <a href="#topo" class="header__logo" aria-label="Sorveteria Encanto, ir para o topo">
+        <span class="logo-marca" aria-hidden="true">
+          <span class="logo-marca__bola"></span>
+          <span class="logo-marca__cone"></span>
+        </span>
         <span>Encanto</span>
       </a>
-      <nav class="header__nav" id="header-nav">
+
+      <nav class="header__nav" aria-label="Navegação principal">
         <a href="#sabores">Sabores</a>
+        <a href="#montar">Monte a sua</a>
         <a href="#combo">Combo</a>
-        <a href="#sobre">Sobre</a>
+        <a href="#duvidas">Dúvidas</a>
         <a href="#local">Onde estamos</a>
       </nav>
-      <a href="#" class="btn btn--primario btn--pequeno header__cta" id="header-whatsapp" target="_blank" rel="noopener noreferrer">Pedir agora</a>
+
+      <span class="selo-status" data-status></span>
+
+      <button type="button" class="btn-carrinho" id="btn-carrinho" aria-label="Abrir carrinho">
+        <svg viewBox="0 0 24 24" width="21" height="21" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/>
+        </svg>
+        <span class="btn-carrinho__contador" id="carrinho-contador" hidden>0</span>
+      </button>
+
+      <a href="#montar" class="btn btn--primario btn--pequeno header__cta">Pedir agora</a>
+
       <button type="button" class="header__burger" id="btn-menu" aria-label="Abrir menu" aria-expanded="false" aria-controls="menu-mobile">
         <span></span><span></span><span></span>
       </button>
@@ -54,53 +116,70 @@
   <!-- ===== MENU MOBILE ===== -->
   <div class="overlay" id="overlay-menu" hidden></div>
   <nav class="menu-mobile" id="menu-mobile" hidden aria-label="Menu">
+    <div class="menu-mobile__topo">
+      <button type="button" class="menu-mobile__fechar" id="menu-fechar" aria-label="Fechar menu">&times;</button>
+    </div>
     <a href="#sabores">Sabores</a>
+    <a href="#montar">Monte a sua</a>
     <a href="#combo">Combo</a>
-    <a href="#sobre">Sobre</a>
+    <a href="#duvidas">Dúvidas</a>
     <a href="#local">Onde estamos</a>
-    <a href="#" class="btn btn--primario" id="menu-whatsapp" target="_blank" rel="noopener noreferrer">Pedir agora</a>
+    <span class="selo-status" data-status></span>
+    <a href="#montar" class="btn btn--primario">Montar meu sorvete</a>
   </nav>
 
   <main id="conteudo">
 
     <!-- ===== HERO ===== -->
     <section class="hero" id="topo">
+      <div class="hero__luz" aria-hidden="true"></div>
       <div class="hero__mancha hero__mancha--1" aria-hidden="true"></div>
       <div class="hero__mancha hero__mancha--2" aria-hidden="true"></div>
-      <div class="hero__confete" id="hero-confete" aria-hidden="true"></div>
+      <canvas class="hero__particulas" id="hero-particulas" aria-hidden="true"></canvas>
 
       <div class="container hero__grade">
         <div class="hero__coluna-texto">
           <p class="hero__eyebrow" id="hero-eyebrow"></p>
           <h1 class="hero__titulo">
-            Sorvete de verdade
-            <span class="hero__titulo-destaque">pra alegrar seu dia.</span>
+            Sorvete de verdade,
+            <span class="hero__titulo-destaque">feito todo santo dia.</span>
           </h1>
           <p class="hero__slogan" id="hero-slogan"></p>
+
           <div class="hero__acoes">
-            <a href="#" class="btn btn--primario btn--grande" id="hero-whatsapp" target="_blank" rel="noopener noreferrer">
-              <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.5 15.2L2 22l4.9-1.5A10 10 0 1 0 12 2zm0 18.2a8.1 8.1 0 0 1-4.2-1.2l-.3-.2-3 .9.9-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2z"/></svg>
-              Pedir no WhatsApp
+            <a href="#montar" class="btn btn--primario btn--grande">
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>
+              Montar meu sorvete
             </a>
-            <a href="#sabores" class="btn btn--fantasma btn--grande">Ver sabores</a>
+            <a href="#sabores" class="btn btn--fantasma btn--grande">Ver os 12 sabores</a>
+          </div>
+
+          <div class="hero__provas">
+            <span class="hero__prova">
+              <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>
+              <span id="hero-prova-entrega"></span>
+            </span>
+            <span class="hero__prova">
+              <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><path d="M12 3 14.5 9H21l-5 4 2 6.5L12 16l-6 3.5L8 13 3 9h6.5z"/></svg>
+              <span id="hero-prova-sabores"></span>
+            </span>
+            <span class="hero__prova">
+              <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>
+              <span>Pedido pelo <strong>WhatsApp</strong></span>
+            </span>
           </div>
         </div>
 
-        <div class="hero__cone-wrap" aria-hidden="true">
-          <div class="cone-grande cone-grande--flutuar">
-            <span class="cone-grande__bola cone-grande__bola--3"></span>
-            <span class="cone-grande__bola cone-grande__bola--2"></span>
-            <span class="cone-grande__bola cone-grande__bola--1"></span>
-            <span class="cone-grande__casquinha"></span>
-          </div>
-          <span class="hero__rabisco hero__rabisco--1">✦</span>
-          <span class="hero__rabisco hero__rabisco--2">✧</span>
-          <span class="hero__rabisco hero__rabisco--3">❉</span>
+        <div class="hero__palco cena-3d">
+          <span class="hero__anel hero__anel--1" aria-hidden="true"></span>
+          <span class="hero__anel hero__anel--2" aria-hidden="true"></span>
+          <span class="hero__pedestal" aria-hidden="true"></span>
+          <div class="hero__sorvete sorvete" id="hero-sorvete" aria-hidden="true"></div>
         </div>
       </div>
 
       <div class="onda-borda" aria-hidden="true">
-        <svg viewBox="0 0 1440 90" preserveAspectRatio="none"><path d="M0,40 C240,90 480,0 720,30 C960,60 1200,10 1440,45 L1440,90 L0,90 Z"></path></svg>
+        <svg viewBox="0 0 1440 92" preserveAspectRatio="none"><path d="M0,44 C240,96 480,4 720,32 C960,60 1200,12 1440,48 L1440,92 L0,92 Z"></path></svg>
       </div>
     </section>
 
@@ -109,46 +188,124 @@
       <div class="faixa-promo__trilho" id="faixa-promo-trilho" aria-hidden="true"></div>
     </div>
 
-    <!-- ===== SABORES ===== -->
-    <section class="secao" id="sabores">
+    <!-- ===== VITRINE DE SABORES ===== -->
+    <section class="secao vitrine" id="sabores">
       <div class="container">
-        <p class="secao__eyebrow">Sabores da casa</p>
-        <h2 class="secao__titulo">Novidades na vitrine</h2>
-        <p class="secao__intro">Seis sabores pra você escolher — todos feitos artesanalmente, todo dia, aqui na loja.</p>
-        <div class="sabores__grade" id="lista-sabores"></div>
+        <div class="vitrine__topo">
+          <div>
+            <p class="secao__eyebrow">Sabores da casa</p>
+            <h2 class="secao__titulo">Direto da vitrine</h2>
+            <p class="secao__intro">Todos feitos artesanalmente aqui na loja, todo dia. Os de fruta são à base de água, então são veganos e sem lactose.</p>
+          </div>
+        </div>
+
+        <div class="vitrine__filtros" id="vitrine-filtros" role="group" aria-label="Filtrar sabores"></div>
+        <div class="vitrine__grade" id="vitrine-grade"></div>
+      </div>
+    </section>
+
+    <!-- ===== MONTE SUA CASQUINHA ===== -->
+    <section class="secao montador" id="montar">
+      <div class="container">
+        <p class="secao__eyebrow">Monte do seu jeito</p>
+        <h2 class="secao__titulo secao__titulo--largo" id="montador-titulo"></h2>
+        <p class="secao__intro" id="montador-intro"></p>
+
+        <div class="montador__grade">
+          <!-- Prévia 3D -->
+          <div class="montador__previa">
+            <div class="montador__palco cena-3d">
+              <div class="montador__sorvete sorvete" id="montador-sorvete" aria-hidden="true"></div>
+            </div>
+            <p class="montador__resumo" id="montador-resumo" aria-live="polite"></p>
+            <div class="montador__total">
+              <span class="montador__total-rotulo">Total</span>
+              <span class="montador__total-valor tabular" id="montador-total">R$ 0,00</span>
+            </div>
+            <button type="button" class="btn btn--primario btn--largo" id="montador-add">Adicionar ao carrinho</button>
+          </div>
+
+          <!-- Passos -->
+          <div class="montador__passos">
+            <div class="passo">
+              <div class="passo__cabeca">
+                <span class="passo__num">1</span>
+                <h3 class="passo__titulo">Escolha a base</h3>
+              </div>
+              <div class="passo__opcoes" id="montador-bases" role="group" aria-label="Base do sorvete"></div>
+            </div>
+
+            <div class="passo">
+              <div class="passo__cabeca">
+                <span class="passo__num">2</span>
+                <h3 class="passo__titulo">Quantas bolas?</h3>
+              </div>
+              <div class="passo__opcoes" id="montador-tamanhos" role="group" aria-label="Tamanho"></div>
+            </div>
+
+            <div class="passo">
+              <div class="passo__cabeca">
+                <span class="passo__num">3</span>
+                <h3 class="passo__titulo">Os sabores</h3>
+                <span class="passo__dica" id="montador-dica-sabores"></span>
+              </div>
+              <div class="sabor-bolinhas" id="montador-sabores" role="group" aria-label="Sabores"></div>
+            </div>
+
+            <div class="passo">
+              <div class="passo__cabeca">
+                <span class="passo__num">4</span>
+                <h3 class="passo__titulo">O que vai por cima</h3>
+              </div>
+              <div class="extras-grade" id="montador-extras" role="group" aria-label="Extras"></div>
+            </div>
+
+            <button type="button" class="btn-sorteio" id="btn-sorteio">
+              <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true">
+                <rect x="3" y="3" width="18" height="18" rx="4"/><circle cx="8.5" cy="8.5" r="1.4" fill="currentColor"/><circle cx="15.5" cy="15.5" r="1.4" fill="currentColor"/><circle cx="12" cy="12" r="1.4" fill="currentColor"/>
+              </svg>
+              Não sei o que pedir, me surpreenda
+            </button>
+          </div>
+        </div>
       </div>
     </section>
 
     <!-- ===== COMBO ===== -->
     <section class="secao secao--combo" id="combo">
-      <span class="secao--combo__rabisco secao--combo__rabisco--1" aria-hidden="true">✦</span>
-      <span class="secao--combo__rabisco secao--combo__rabisco--2" aria-hidden="true">🍒</span>
       <div class="container combo__grade">
-        <div class="combo__leque" id="combo-leque" aria-hidden="true"></div>
+        <div class="combo__leque cena-3d" id="combo-leque" aria-hidden="true"></div>
         <div class="combo__texto">
           <p class="secao__eyebrow">Pra compartilhar</p>
-          <h2 class="secao__titulo">Monte seu combo e aproveite com a galera</h2>
+          <h2 class="secao__titulo" id="combo-nome"></h2>
           <p class="secao__intro" id="combo-descricao"></p>
+          <ul class="combo__lista" id="combo-lista"></ul>
           <div class="combo__preco">
-            <span class="combo__preco-de" id="combo-preco-de"></span>
-            <span class="combo__preco-por" id="combo-preco-por"></span>
+            <span class="combo__preco-de tabular" id="combo-preco-de"></span>
+            <span class="combo__preco-por tabular" id="combo-preco-por"></span>
+            <span class="combo__economia" id="combo-economia"></span>
           </div>
-          <a href="#" class="btn btn--primario btn--grande" id="combo-whatsapp" target="_blank" rel="noopener noreferrer">Pedir combo agora</a>
+          <button type="button" class="btn btn--claro btn--grande" id="combo-add">Adicionar o combo</button>
         </div>
       </div>
     </section>
 
     <!-- ===== SOBRE ===== -->
-    <section class="secao secao--sobre" id="sobre">
+    <section class="secao" id="sobre">
       <div class="container sobre__grade">
-        <div class="sobre__foto" aria-hidden="true">
-          <div class="sobre__foto-mancha"></div>
-          <span class="sobre__foto-emoji">🍨</span>
+        <div class="sobre__palco cena-3d" aria-hidden="true">
+          <span class="sobre__palco-anel"></span>
+          <div class="sorvete" style="position:relative;width:170px;height:270px">
+            <span class="bola bola--f2" style="--d:92px;--cor1:#f6e6c8;--cor2:#c9a878;--luz:#fffaf0;--cor-escura:#8a7352;--rebote:#fff;bottom:96px"></span>
+            <span class="casquinha" style="--w:84px;--h:128px;bottom:0"><span class="casquinha__borda" style="--w:84px"></span></span>
+            <span class="sombra-chao" style="width:140px;height:44px;bottom:-8px"></span>
+          </div>
         </div>
         <div>
           <p class="secao__eyebrow">Nossa história</p>
           <h2 class="secao__titulo" id="sobre-titulo"></h2>
           <p class="secao__intro" id="sobre-texto"></p>
+          <div class="numeros-grade" id="sobre-numeros"></div>
         </div>
       </div>
     </section>
@@ -162,14 +319,26 @@
       </div>
     </section>
 
-    <!-- ===== CTA FAIXA ===== -->
+    <!-- ===== FAQ ===== -->
+    <section class="secao" id="duvidas">
+      <div class="container">
+        <p class="secao__eyebrow">Dúvidas</p>
+        <h2 class="secao__titulo">Perguntas que a gente sempre escuta</h2>
+        <div class="faq-lista" id="faq-lista"></div>
+      </div>
+    </section>
+
+    <!-- ===== CTA ===== -->
     <div class="cta-faixa">
       <div class="container cta-faixa__inner">
         <div>
           <h2>Bateu aquela vontade de sorvete?</h2>
-          <p>Chama no WhatsApp e já vai separando sua casquinha.</p>
+          <p>Monta a sua aqui no site ou chama a gente no WhatsApp.</p>
         </div>
-        <a href="#" class="btn btn--claro btn--grande" id="cta-whatsapp" target="_blank" rel="noopener noreferrer">Chamar no WhatsApp</a>
+        <a href="#" class="btn btn--claro btn--grande" data-wa target="_blank" rel="noopener noreferrer">
+          <svg viewBox="0 0 24 24" width="19" height="19" fill="currentColor" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.5 15.2L2 22l4.9-1.5A10 10 0 1 0 12 2zm0 18.2a8.1 8.1 0 0 1-4.2-1.2l-.3-.2-3 .9.9-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2z"/></svg>
+          Chamar no WhatsApp
+        </a>
       </div>
     </div>
 
@@ -179,18 +348,26 @@
         <div>
           <p class="secao__eyebrow">Onde estamos</p>
           <h2 class="secao__titulo">Vem tomar um sorvetinho</h2>
-          <p class="local__item" id="local-endereco"></p>
+
+          <p class="local__item">
+            <svg viewBox="0 0 24 24" width="19" height="19" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0z"/><circle cx="12" cy="10" r="3"/></svg>
+            <span id="local-endereco"></span>
+          </p>
+
           <div class="local__horario" id="local-horario"></div>
+          <p class="local__bairros" id="local-bairros"></p>
+
           <div class="local__acoes">
-            <a href="#" class="btn btn--primario" id="local-whatsapp" target="_blank" rel="noopener noreferrer">Chamar no WhatsApp</a>
+            <a href="#" class="btn btn--primario" data-wa target="_blank" rel="noopener noreferrer">Chamar no WhatsApp</a>
             <a href="#" class="btn btn--fantasma" id="local-mapa" target="_blank" rel="noopener noreferrer">Abrir no Google Maps</a>
           </div>
         </div>
+
         <div class="mapa-card">
           <div class="mapa-card__fundo" aria-hidden="true">
-            <svg viewBox="0 0 200 140" preserveAspectRatio="none"><path d="M0 30 H200 M0 70 H200 M0 110 H200 M40 0 V140 M100 0 V140 M160 0 V140" stroke="currentColor" stroke-width="1" opacity="0.35"/></svg>
-            <span class="mapa-card__pin">🍦</span>
+            <svg viewBox="0 0 200 140" preserveAspectRatio="none"><path d="M0 30 H200 M0 70 H200 M0 110 H200 M40 0 V140 M100 0 V140 M160 0 V140" stroke="currentColor" stroke-width="1.2" fill="none"/></svg>
           </div>
+          <span class="mapa-card__pin" aria-hidden="true"><span>🍦</span></span>
         </div>
       </div>
     </section>
@@ -200,23 +377,79 @@
   <!-- ===== RODAPÉ ===== -->
   <footer class="rodape">
     <div class="container rodape__inner">
-      <p>© <span id="ano-atual"></span> Sorveteria Encanto.</p>
-      <p class="rodape__aviso">Projeto demonstrativo criado pela Âncora — não representa uma sorveteria real. Nomes nos depoimentos são fictícios.</p>
+      <p class="rodape__marca">
+        <span class="logo-marca" aria-hidden="true">
+          <span class="logo-marca__bola"></span>
+          <span class="logo-marca__cone"></span>
+        </span>
+        <span data-nome-negocio></span>
+      </p>
+      <p>© <span id="ano-atual"></span> <span data-nome-negocio></span>. Feito com muito sorvete.</p>
+      <p class="rodape__aviso">
+        Projeto demonstrativo criado pela Âncora — não representa uma sorveteria real.
+        Campo Alegre - MT é uma cidade fictícia e os nomes nos depoimentos são inventados.
+      </p>
     </div>
   </footer>
 
+  <!-- ===== CARRINHO ===== -->
+  <div class="overlay" id="overlay-carrinho" hidden></div>
+  <aside class="carrinho" id="carrinho" aria-label="Carrinho de pedidos" aria-hidden="true">
+    <div class="carrinho__topo">
+      <h2 class="carrinho__titulo">Seu pedido</h2>
+      <button type="button" class="carrinho__fechar" id="carrinho-fechar" aria-label="Fechar carrinho">&times;</button>
+    </div>
+
+    <div class="carrinho__corpo" id="carrinho-corpo"></div>
+
+    <div class="carrinho__pe">
+      <div class="entrega-opcoes" role="group" aria-label="Como você quer receber">
+        <button type="button" class="chip is-ativo" data-entrega="retirada" aria-pressed="true">Retirar na loja</button>
+        <button type="button" class="chip" data-entrega="entrega" aria-pressed="false">Entrega</button>
+      </div>
+
+      <p class="carrinho__aviso" id="carrinho-aviso" hidden></p>
+
+      <div class="carrinho__linha">
+        <span>Subtotal</span>
+        <span class="tabular" id="carrinho-subtotal">R$ 0,00</span>
+      </div>
+      <div class="carrinho__linha" id="carrinho-linha-taxa" hidden>
+        <span>Taxa de entrega</span>
+        <span class="tabular" id="carrinho-taxa">R$ 0,00</span>
+      </div>
+      <div class="carrinho__linha">
+        <span>Tempo estimado</span>
+        <span id="carrinho-tempo"></span>
+      </div>
+      <div class="carrinho__linha carrinho__linha--total">
+        <span>Total</span>
+        <span class="tabular" id="carrinho-total">R$ 0,00</span>
+      </div>
+
+      <button type="button" class="btn btn--primario btn--largo btn--grande" id="carrinho-finalizar" style="margin-top:14px" disabled>
+        <svg viewBox="0 0 24 24" width="19" height="19" fill="currentColor" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.5 15.2L2 22l4.9-1.5A10 10 0 1 0 12 2zm0 18.2a8.1 8.1 0 0 1-4.2-1.2l-.3-.2-3 .9.9-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2z"/></svg>
+        Finalizar no WhatsApp
+      </button>
+    </div>
+  </aside>
+
   <!-- ===== BOTÃO FLUTUANTE ===== -->
-  <div class="flutuantes">
-    <a href="#" class="wa-flutuante" id="wa-flutuante" target="_blank" rel="noopener noreferrer" aria-label="Falar no WhatsApp">
-      <svg viewBox="0 0 24 24" width="26" height="26" fill="currentColor" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.5 15.2L2 22l4.9-1.5A10 10 0 1 0 12 2zm0 18.2a8.1 8.1 0 0 1-4.2-1.2l-.3-.2-3 .9.9-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8-.2-.1-.4-.1-.6.1-.2.2-.7.8-.8 1-.2.2-.3.2-.5.1-.2-.1-1-.4-1.9-1.2-.7-.6-1.2-1.4-1.3-1.6-.1-.2 0-.4.1-.5.1-.1.2-.3.4-.4.1-.1.2-.2.2-.4.1-.1 0-.3 0-.4 0-.1-.6-1.5-.8-2-.2-.5-.4-.4-.6-.4h-.5c-.2 0-.4.1-.6.3-.2.2-.8.8-.8 1.9s.8 2.2.9 2.4c.1.2 1.6 2.5 4 3.5.6.2 1 .4 1.3.5.5.2 1 .1 1.4-.1.4-.2 1.3-.9 1.4-1.4.2-.5.2-.9.1-1z"/></svg>
-    </a>
+  <a href="#" class="wa-flutuante" data-wa target="_blank" rel="noopener noreferrer" aria-label="Falar no WhatsApp">
+    <svg viewBox="0 0 24 24" width="27" height="27" fill="currentColor" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.5 15.2L2 22l4.9-1.5A10 10 0 1 0 12 2zm0 18.2a8.1 8.1 0 0 1-4.2-1.2l-.3-.2-3 .9.9-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8-.2-.1-.4-.1-.6.1-.2.2-.7.8-.8 1-.2.2-.3.2-.5.1-.2-.1-1-.4-1.9-1.2-.7-.6-1.2-1.4-1.3-1.6-.1-.2 0-.4.1-.5.1-.1.2-.3.4-.4.1-.1.2-.2.2-.4.1-.1 0-.3 0-.4 0-.1-.6-1.5-.8-2-.2-.5-.4-.4-.6-.4h-.5c-.2 0-.4.1-.6.3-.2.2-.8.8-.8 1.9s.8 2.2.9 2.4c.1.2 1.6 2.5 4 3.5.6.2 1 .4 1.3.5.5.2 1 .1 1.4-.1.4-.2 1.3-.9 1.4-1.4.2-.5.2-.9.1-1z"/></svg>
+  </a>
+
+  <!-- ===== BARRA FIXA DO CELULAR ===== -->
+  <div class="barra-mobile">
+    <div class="barra-mobile__info">
+      <div class="barra-mobile__rotulo" id="barra-rotulo">Carrinho vazio</div>
+      <div class="barra-mobile__valor tabular" id="barra-total">R$ 0,00</div>
+    </div>
+    <button type="button" class="btn btn--primario" id="barra-abrir">Ver pedido</button>
   </div>
 
-  <!-- ===== BARRA DE AÇÃO FIXA (só no celular) ===== -->
-  <a href="#" class="cta-mobile" id="cta-mobile-whatsapp" target="_blank" rel="noopener noreferrer">
-    <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.5 15.2L2 22l4.9-1.5A10 10 0 1 0 12 2zm0 18.2a8.1 8.1 0 0 1-4.2-1.2l-.3-.2-3 .9.9-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2z"/></svg>
-    Pedir no WhatsApp
-  </a>
+  <!-- ===== AVISO FLUTUANTE ===== -->
+  <div class="aviso" id="aviso" role="status" aria-live="polite"></div>
 
   <script src="js/config.js"></script>
   <script src="js/main.js"></script>
